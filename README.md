@@ -4,7 +4,39 @@ Sistema completo de gerenciamento de comandas para restaurantes e pizzarias, des
 
 ---
 
-## Visão Geral
+## Demonstracao em Video
+
+Assista ao sistema funcionando ao vivo:
+
+[![Demonstracao do sistema](https://img.youtube.com/vi/4vzhSETQE1I/0.jpg)](https://youtu.be/4vzhSETQE1I)
+
+---
+
+## Screenshots
+
+**Tela de Login**
+
+![Login](screenshots/login.png)
+
+**Mapa de Mesas**
+
+![Mesas](screenshots/mesas.png)
+
+**Adicionar Item na Comanda**
+
+![Comanda](screenshots/comanda.png)
+
+**Tela da Cozinha**
+
+![Cozinha](screenshots/cozinha.png)
+
+**Painel do Caixa**
+
+![Caixa](screenshots/caixa.png)
+
+---
+
+## Visao Geral
 
 O sistema foi construído para substituir o controle manual de pedidos em papel, permitindo que garçons registrem pedidos pelo celular enquanto o caixa acompanha tudo em tempo real no computador. A cozinha visualiza os pedidos em andamento e atualiza o status de cada item conforme são preparados.
 
