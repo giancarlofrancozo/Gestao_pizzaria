@@ -8,7 +8,7 @@ Sistema completo de gerenciamento de comandas para restaurantes e pizzarias, des
 
 Assista ao sistema funcionando ao vivo:
 
-[![Demonstracao do sistema](https://img.youtube.com/vi/4vzhSETQE1I/0.jpg)]((https://youtu.be/UFahEj4N4pg))
+[![Demonstracao do sistema](https://img.youtube.com/vi/4vzhSETQE1I/0.jpg)](https://youtu.be/UFahEj4N4pg)
 
 ---
 
