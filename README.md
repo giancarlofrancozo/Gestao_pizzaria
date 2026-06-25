@@ -1,4 +1,4 @@
-# Sistema de Gerenciamento para Pizzaria
+[# Sistema de Gerenciamento para Pizzaria
 
 Sistema completo de gerenciamento de comandas para restaurantes e pizzarias, desenvolvido em Python com interface web responsiva acessível por celular via Wi-Fi.
 
@@ -188,3 +188,4 @@ netsh advfirewall firewall add rule name="Pizzaria" dir=in action=allow protocol
 ## Autor
 
 Desenvolvido como projeto pessoal para estudo de desenvolvimento web e APIs REST com Python.
+](https://youtu.be/UFahEj4N4pg)
