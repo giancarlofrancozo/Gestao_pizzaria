@@ -28,7 +28,6 @@ app = FastAPI(title="Pizzaria API")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static"), html=True), name="static")
 
-
 # ── Inicialização ─────────────────────────────────────────────────────────────
 
 @app.on_event("startup")
@@ -267,6 +266,8 @@ class DeliveryBody(BaseModel):
     telefone: str
     nome_cliente: str
     endereco: str
+    forma_pagamento: str
+    troco: Optional[float] = 0.0
 
 @app.get("/api/entregas")
 def api_listar_entregas():
@@ -281,20 +282,20 @@ def api_listar_entregas():
             "nome_cliente": e.nome_cliente,
             "endereco": e.endereco,
             "status": e.status,
-            "total": getattr(e, "total_calculado", 0.0)
+            "total": getattr(e, "total_calculado", 0.0),
+            "forma_pagamento": e.forma_pagamento,
+            "troco": e.troco
         })
     return resultado
 
 @app.post("/api/entregas")
 def api_criar_entregas(body: DeliveryBody):
     """Abre uma comanda de balcão/delivery e vincula os dados cadastrais do cliente."""
-    # 1. Cria a comanda sem amarra de mesa física
     comanda = abrir_comanda_entregas()
     if not comanda:
         raise HTTPException(400, "Não foi possível gerar uma comanda para a entrega.")
         
-    # 2. Registra os dados cadastrais da entrega associados a essa comanda
-    entrega = criar_entrega(comanda.id, body.telefone, body.nome_cliente, body.endereco)
+    entrega = criar_entrega(comanda.id, body.telefone, body.nome_cliente, body.endereco, body.forma_pagamento, body.troco)
     if not entrega:
         raise HTTPException(400, "Erro ao processar o vínculo cadastral da entrega.")
         

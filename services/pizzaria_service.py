@@ -24,7 +24,7 @@ def abrir_comanda_entregas():
     finally:
         session.close()
 
-def criar_entrega(comanda_id: int, telefone: str, nome_cliente: str, endereco: str):
+def criar_entrega(comanda_id: int, telefone: str, nome_cliente: str, endereco: str, forma_pagamento: str, troco: float ):
     session = Session()
     try:
         nova_entrega = Entrega(
@@ -32,7 +32,9 @@ def criar_entrega(comanda_id: int, telefone: str, nome_cliente: str, endereco: s
             telefone=telefone,
             nome_cliente=nome_cliente,
             endereco=endereco,
-            status="pendente"
+            status="pendente",
+            forma_pagamento=forma_pagamento,
+            troco=troco
         )
         session.add(nova_entrega)
         session.commit()
@@ -56,7 +58,9 @@ def listar_entregas_ativas():
             if e.comanda:
                 _ = e.comanda.total
                 for item in e.comanda.itens:
-                    _ = item.produto.nome
+                    _ = item.subtotal
+                    if item.produto:
+                        _ = item.produto.nome
                 e.total_calculado = e.comanda.total
             else:
                 e.total_calculado = 0.0

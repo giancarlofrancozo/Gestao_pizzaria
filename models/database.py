@@ -64,6 +64,8 @@ class Entrega(Base):
     endereco = Column (String, nullable=False)
     status = Column(String, default="pendente")
     criado = Column(DateTime, default=datetime.now)
+    forma_pagamento = Column (String, default= "não informado")
+    troco = Column (Float, default=0.0 )
 
     comanda = relationship("Comanda")    
 

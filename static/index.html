@@ -79,7 +79,7 @@ nav::-webkit-scrollbar { display: none; }
 /* ── Formulário ── */
 .form-group { margin-bottom: .75rem; }
 .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
-select, input[type=number], input[type=text] {
+select, input[type=number], input[type=text], input[type=password] {
   width: 100%; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm);
   color: var(--text); font-family: inherit; font-size: 14px; padding: 10px 12px; outline: none;
 }
@@ -142,19 +142,27 @@ select:focus, input:focus { border-color: var(--accent); }
 .comanda-itens { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
 .loading { text-align: center; padding: 2rem; color: var(--muted); font-size: 14px; }
+
+/* ── Modal Lote ── */
+#lista-itens-confirmacao { list-style: none; padding: 0; max-height: 200px; overflow-y: auto; margin: 20px 0; border-bottom: 1px solid #333; }
+#lista-itens-confirmacao li { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #2a2a2a; }
+.modal-total-lote { display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 20px; font-weight: bold; }
+.modal-total-lote strong { color: var(--accent); }
+
+/* Balão flutuante do carrinho temporário */
+#float-carrinho {
+  position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: #fff;
+  padding: 12px 20px; border-radius: 30px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(232, 133, 74, 0.4); z-index: 150; display: none; align-items: center; gap: 8px;
+}
+#float-carrinho:hover { background: var(--accent2); }
 </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
-<div id="tela-login" style="
-  position:fixed;inset:0;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  z-index:999;padding:1.5rem">
+<div id="tela-login" style="position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:1.5rem">
   <div style="width:100%;max-width:360px">
-    <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--accent);text-align:center;margin-bottom:2rem">
-       Pizzaria
-    </div>
+    <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--accent);text-align:center;margin-bottom:2rem">Pizzaria</div>
     <div class="card">
       <div class="form-group">
         <label>Usuário</label>
@@ -164,20 +172,11 @@ select:focus, input:focus { border-color: var(--accent); }
         <label>Senha</label>
         <input type="password" id="login-senha" placeholder="Sua senha">
       </div>
-      <div id="login-erro" style="color:var(--red);font-size:13px;margin-bottom:.5rem;display:none">
-        Usuário ou senha incorretos
-      </div>
+      <div id="login-erro" style="color:var(--red);font-size:13px;margin-bottom:.5rem;display:none">Usuário ou senha incorretos</div>
       <button class="btn btn-primary btn-full" onclick="fazerLogin()">Entrar</button>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
 
 <header>
   <div class="logo"> Pizzaria</div>
@@ -185,15 +184,15 @@ select:focus, input:focus { border-color: var(--accent); }
 </header>
 
 <nav>
-  <div class="nav-tab active" onclick="setTab('garcom')"><span>🧑‍🍳</span>Garçom</div>
-  <div class="nav-tab" onclick="setTab('caixa')"><span>💰</span>Caixa</div>
-  <div class="nav-tab" onclick="setTab('delivery')"><span>🛵</span>Delivery</div>
-  <div class="nav-tab" onclick="setTab('cozinha')"><span>🔥</span>Cozinha</div>
-  <div class="nav-tab" onclick="setTab('cardapio')"><span>📋</span>Cardápio</div>
-  <div class="nav-tab" onclick="setTab('garcons')"><span>👤</span>Garçons</div>
+  <div class="nav-tab active" onclick="setTab('garcom')"><span></span>Garçom</div>
+  <div class="nav-tab" onclick="setTab('caixa')"><span></span>Caixa</div>
+  <div class="nav-tab" onclick="setTab('delivery')"><span></span>Delivery</div><div
+  <div class="nav-tab" onclick="setTab('balcao')"><span></span>Balcão</div>
+  <div class="nav-tab" onclick="setTab('cardapio')"><span></span>Cardápio</div>
+  <div class="nav-tab" onclick="setTab('garcons')"><span></span>Garçons</div>
 </nav>
-<!-- ── Devivery ── -->
- <div id="page-delivery" class="page">
+
+<div id="page-delivery" class="page">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
     <div style="font-size:15px;font-weight:600">Entregas Ativas</div>
     <button class="btn btn-sm btn-primary" onclick="abrirModalNovaEntrega()">+ Nova Entrega</button>
@@ -201,7 +200,14 @@ select:focus, input:focus { border-color: var(--accent); }
   <div id="delivery-list"><div class="loading">Carregando entregas...</div></div>
 </div>
 
-<!-- ── GARÇOM ── -->
+<div id="page-balcao" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <div style="font-size:15px;font-weight:600">Retiradas no Balcão</div>
+    <button class="btn btn-sm btn-primary" onclick="abrirModalNovoBalcao()">+ Novo Pedido</button>
+  </div>
+  <div id="balcao-list"><div class="loading">Carregando pedidos...</div></div>
+</div>
+
 <div id="page-garcom" class="page active">
   <div class="card">
     <div class="card-title">Mesas</div>
@@ -210,7 +216,6 @@ select:focus, input:focus { border-color: var(--accent); }
   <div id="mesa-panel"></div>
 </div>
 
-<!-- ── CAIXA ── -->
 <div id="page-caixa" class="page">
   <div class="stats" id="stats"></div>
   <div class="card-title" style="padding:0 0 .5rem">Comandas abertas</div>
@@ -218,22 +223,10 @@ select:focus, input:focus { border-color: var(--accent); }
   <div id="caixa-list"><div class="loading">Carregando...</div></div>
 </div>
 
-<!-- ── COZINHA ── -->
-<div id="page-cozinha" class="page">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-    <div style="font-size:15px;font-weight:600">Pedidos</div>
-    <button class="btn btn-sm" onclick="loadCozinha()">↻ Atualizar</button>
-  </div>
-  <div id="cozinha-list"><div class="loading">Carregando...</div></div>
-</div>
-
-<!-- ── CARDÁPIO ── -->
 <div id="page-cardapio" class="page">
   <div id="cardapio-list"><div class="loading">Carregando...</div></div>
 </div> 
 
-
-<!-- ── GARÇONS ── -->
 <div id="page-garcons" class="page">
   <div class="card">
     <div class="card-title">Cadastrar garçom</div>
@@ -260,7 +253,19 @@ select:focus, input:focus { border-color: var(--accent); }
       <label>Telefone do Cliente</label>
       <input type="text" id="d-telefone" placeholder="Ex: (11) 99999-9999">
     </div>
-    
+
+<div class="form-group">
+  <label>Forma de Pagamento</label>
+  <select id="d-forma-pagamento" onchange="toggleTrocoField()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px;">
+    <option value="pix">Pix</option>
+    <option value="cartao">Cartão (Crédito/Débito)</option>
+    <option value="dinheiro">Dinheiro</option>
+  </select>
+</div>
+<div class="form-group" id="d-troco-container" style="display: none;">
+  <label>Troco para quanto?</label>
+  <input type="number" id="d-troco" value="0" step="0.01" placeholder="Ex: 50.00">
+</div>
     <div class="form-group">
       <label>Nome do Cliente</label>
       <input type="text" id="d-nome" placeholder="Nome completo">
@@ -276,9 +281,40 @@ select:focus, input:focus { border-color: var(--accent); }
   </div>
 </div>
 
+<div class="overlay" id="balcao-modal-overlay" onclick="if(event.target===this)closeModalBalcao()">
+  <div class="modal" id="balcao-modal-content">
+    <div class="drag-bar"></div>
+    <div class="modal-title"> Novo Pedido Balcão</div>
+    
+    <div class="form-group">
+      <label>Nome do Cliente (Quem vai retirar)</label>
+      <input type="text" id="b-nome" placeholder="Ex: João da Silva">
+    </div>
+    
+    <div class="form-group">
+      <label>Telefone (Opcional para avisar quando ficar pronto)</label>
+      <input type="text" id="b-telefone" placeholder="Ex: (11) 99999-9999">
+    </div>
 
+    <div class="form-group">
+      <label>Forma de Pagamento</label>
+      <select id="b-forma-pagamento" onchange="toggleTrocoFieldBalcao()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px;">
+        <option value="pix">Pix</option>
+        <option value="cartao">Cartão (Crédito/Débito)</option>
+        <option value="dinheiro">Dinheiro</option>
+      </select>
+    </div>
+    
+    <div class="form-group" id="b-troco-container" style="display: none;">
+      <label>Troco para quanto?</label>
+      <input type="number" id="b-troco" value="0" step="0.01" placeholder="Ex: 50.00">
+    </div>
+    
+    <button class="btn btn-primary btn-full" onclick="confirmarNovoBalcao()">Abrir Pedido</button>
+    <button class="btn btn-full" style="margin-top:8px" onclick="closeModalBalcao()">Cancelar</button>
+  </div>
+</div>
 
-<!-- ── MODAL ADICIONAR ITEM ── -->
 <div class="overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal-content">
     <div class="drag-bar"></div>
@@ -317,17 +353,53 @@ select:focus, input:focus { border-color: var(--accent); }
       <label>Observação</label>
       <input type="text" id="m-obs" placeholder="Ex: sem cebola">
     </div>
-    <button class="btn btn-primary btn-full" onclick="confirmarItem()">Adicionar à comanda</button>
-    <button class="btn btn-full" style="margin-top:8px" onclick="closeModal()">Cancelar</button>
+    
+    <button class="btn btn-primary btn-full" onclick="adicionarNoCarrinho()">Adicionar ao pedido</button>
+    <button class="btn btn-full" style="margin-top:8px" onclick="closeModal()">Sair</button>
   </div>
 </div>
 
-<!-- ── MODAL FECHAR COMANDA ── -->
+<div class="overlay" id="modal-confirmacao" onclick="if(event.target===this)fecharModalConfirmacao()">
+  <div class="modal">
+      <div class="drag-bar"></div>
+      <div class="modal-title">📋 Resumo do Pedido</div>
+      <p style="color:var(--muted); font-size:14px;">Itens a serem enviados:</p>
+      
+      <ul id="lista-itens-confirmacao"></ul>
+      
+      <div class="modal-total-lote">
+          <span>Total:</span>
+          <strong id="modal-total-valor">R$ 0,00</strong>
+      </div>
+      
+      <button class="btn btn-primary btn-full" onclick="enviarPedidoLote()">Confirmar e Lançar</button>
+      <button class="btn btn-full" style="margin-top:8px" onclick="fecharModalConfirmacao()">Voltar</button>
+  </div>
+</div>
+
+<div id="float-carrinho" onclick="abrirConfirmacao()">
+  🛒 <span id="float-badge">0</span> Lançar Pedido
+</div>
+
+
 <div class="overlay" id="fechar-overlay" onclick="if(event.target===this)closeFechar()">
   <div class="modal" id="fechar-content">
     <div class="drag-bar"></div>
     <div class="modal-title">Fechar conta</div>
     <div id="fechar-resumo"></div>
+    <div style="margin-top: 1rem; padding: 12px; background: var(--bg3); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+      <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Dividir Conta</div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <div style="flex: 1;">
+          <label style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">Nº de Pessoas</label>
+          <input type="number" id="calc-pessoas" value="1" min="1" oninput="calcularDivisaoConta()" style="padding: 8px 10px; font-size: 14px;">
+        </div>
+        <div style="flex: 1; text-align: right;">
+          <div style="font-size: 11px; color: var(--muted); margin-bottom: 4px;">Valor por Pessoa</div>
+          <div id="calc-resultado-divisao" style="font-size: 18px; font-weight: 600; color: var(--green);">R$ 0.00</div>
+        </div>
+      </div>
+    </div>
     <button class="btn btn-danger btn-full" style="margin-top:1rem" onclick="confirmarFechar()">Confirmar fechamento</button>
     <button class="btn btn-full" style="margin-top:8px" onclick="closeFechar()">Cancelar</button>
   </div>
@@ -342,6 +414,9 @@ let comandaAtual = null;
 let comandaFecharId = null;
 let tabAtual = 'garcom';
 
+// ARRAY PARA GUARDAR OS ITENS ANTES DO ENVIO
+let carrinhoItens = []; 
+
 const API = '';
 
 async function api(path, method='GET', body=null) {
@@ -350,7 +425,7 @@ async function api(path, method='GET', body=null) {
   const r = await fetch(API + path, opts);
   if (!r.ok) {
     const e = await r.json();
-    throw new Error(JSON.stringify(e));  // ← mostra o erro completo
+    throw new Error(JSON.stringify(e));
   }
   return r.status === 204 ? null : r.json();
 }
@@ -367,17 +442,15 @@ function setTab(t) {
   document.getElementById('page-'+t).classList.add('active');
   event.currentTarget.classList.add('active');
   document.getElementById('role-label').textContent =
-    {garcom:'Garçom',caixa:'Caixa',cozinha:'Cozinha',cardapio:'Cardápio', garcons:'Garçons'}[t];
+    {garcom:'Garçom',caixa:'Caixa',delivery:'Delivery',cardapio:'Cardápio', garcons:'Garçons', balcao:'Balcão'}[t];
+  
   if (t==='garcom') loadMesas();
   if (t==='caixa') loadCaixa();
-  if (t==='delivery') loaddevilvery();
-  if (t==='cozinha') loadCozinha();
+  if (t==='delivery') loadDelivery();
   if (t==='cardapio') loadCardapio();
   if (t === 'garcons') loadGarcons();
+  if (t==='balcao') loadBalcao(); 
 }
-
-
-
 
 // ── Garçom ────────────────────────────────────────────────────────────────────
 
@@ -398,8 +471,6 @@ async function fazerLogin() {
     document.getElementById('login-erro').style.display = 'block';
   }
 }
-
-
 
 async function loadGarcons() {
   const garcons = await api('/api/garcons');
@@ -436,12 +507,6 @@ async function removerGarcom(id) {
   await api(`/api/garcons/${id}`, 'DELETE');
   await loadGarcons();
 }
-
-
-
-// ── Login ────────────────────────────────────────────────────────────────────
-
-
 
 async function loadMesas() {
   const mesas = await api('/api/mesas');
@@ -526,17 +591,33 @@ async function openModal(comandaId) {
 
   const pizzas = cardapio.filter(p => p.categoria === 'pizza');
   const pizzaOpts = pizzas.map(p => `<option value="${p.id}">${p.nome} — R$ ${p.preco.toFixed(2)}</option>`).join('');
+  const grupo = {};
+  cardapio.forEach(p => {
+    if (!grupo[p.categoria]) grupo[p.categoria] = [];
+    grupo[p.categoria].push(p);
+  });
+  let htmlProdutosAgrupados = '';
+  for (const categoria in grupo)  {
+    const nomeGrupo = categoria.toUpperCase();
+    htmlProdutosAgrupados += `<optgroup label="── ${nomeGrupo} ──">`;
+    htmlProdutosAgrupados += grupo[categoria].map(p => 
+      `<option value="${p.id}" data-cat="${p.categoria}" data-preco="${p.preco}">${p.nome} — R$ ${p.preco.toFixed(2)}</option>`
+    ).join('');
+    htmlProdutosAgrupados += `</optgroup>`;
+  }
 
-  document.getElementById('m-produto').innerHTML =
-    cardapio.map(p => `<option value="${p.id}" data-cat="${p.categoria}">${p.nome} — R$ ${p.preco.toFixed(2)}</option>`).join('');
+  document.getElementById('m-produto').innerHTML = htmlProdutosAgrupados;
   document.getElementById('m-produto2').innerHTML = pizzaOpts;
   document.getElementById('m-borda').innerHTML =
-    bordas.map(b => `<option value="${b.id}">${b.tipo}${b.preco>0?' +R$ '+b.preco.toFixed(2):' (grátis)'}</option>`).join('');
+    bordas.map(b => `<option value="${b.id}" data-preco="${b.preco}">${b.tipo}${b.preco>0?' +R$ '+b.preco.toFixed(2):' (grátis)'}</option>`).join('');
 
   document.getElementById('m-qtd').value = 1;
   document.getElementById('m-obs').value = '';
   document.getElementById('m-meio').value = '0';
   onProdChange();
+  
+  carrinhoItens = []; // Zera o carrinho novo a cada abertura de comanda
+  atualizaBotaoFlutuante();
   document.getElementById('modal-overlay').classList.add('open');
 }
 
@@ -560,37 +641,146 @@ function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
 
-async function confirmarItem() {
-  const prodId = parseInt(document.getElementById('m-produto').value);
+// ── LOGICA NOVA DE ADIÇÃO E LOTE ───────────────────────────────────────────────────
+function adicionarNoCarrinho() {
+  const prodSelect = document.getElementById('m-produto');
+  const prodOption = prodSelect.options[prodSelect.selectedIndex];
+  
+  const prodId = parseInt(prodSelect.value);
+  const nomeBase = prodOption.text.split(' — ')[0];
+  const precoBase = parseFloat(prodOption.dataset.preco);
+
   const meio = document.getElementById('m-meio').value === '1';
-  const prod2Id = meio ? parseInt(document.getElementById('m-produto2').value) : null;
+  let prod2Id = null;
+  let nomeExibicao = nomeBase;
+
+  if (meio) {
+    const p2Select = document.getElementById('m-produto2');
+    prod2Id = parseInt(p2Select.value);
+    nomeExibicao = `1/2 ${nomeBase} / 1/2 ${p2Select.options[p2Select.selectedIndex].text.split(' — ')[0]}`;
+  }
+
   const bordaEl = document.getElementById('m-borda');
-  const bordaId = document.getElementById('m-row-borda').style.display !== 'none'
-    ? parseInt(bordaEl.value) : null;
-  const qtd = parseInt(document.getElementById('m-qtd').value) || 1;
+  let bordaId = null;
+  let precoBorda = 0;
+  
+  if (document.getElementById('m-row-borda').style.display !== 'none') {
+      bordaId = parseInt(bordaEl.value);
+      precoBorda = parseFloat(bordaEl.options[bordaEl.selectedIndex].dataset.preco);
+      nomeExibicao += ` [${bordaEl.options[bordaEl.selectedIndex].text.split(' +')[0]}]`;
+  }
+
   const tamanho = document.getElementById('m-row-tamanho').style.display !== 'none'
   ? document.getElementById('m-tamanho').value : 'grande';
+  
+  let precoCalc = precoBase + precoBorda;
+  if (tamanho === 'broto') { precoCalc -= 10; nomeExibicao += ' (Broto)'; }
+
+  const qtd = parseInt(document.getElementById('m-qtd').value) || 1;
   const obs = document.getElementById('m-obs').value;
 
-  try {
-    await api(`/api/comanda/${window._modalComandaId}/item`, 'POST', {
-      produto_id: prodId, quantidade: qtd, observacao: obs,
-      produto2_id: prod2Id, borda_id: bordaId || null, tamanho: tamanho
-    });
-    closeModal();
-    await loadMesas();
-  } catch(e) { alert(e.message); }
+  // Adiciona ao array local
+  carrinhoItens.push({
+      produto_id: prodId,
+      produto2_id: prod2Id,
+      borda_id: bordaId,
+      tamanho: tamanho,
+      quantidade: qtd,
+      observacao: obs,
+      nome_exibicao: nomeExibicao,
+      preco_unitario: precoCalc,
+      subtotal: precoCalc * qtd
+  });
+
+  // Limpa campos para novo lançamento
+  document.getElementById('m-qtd').value = 1;
+  document.getElementById('m-obs').value = '';
+  document.getElementById('m-meio').value = '0';
+  onProdChange();
+  
+  closeModal();
+  atualizaBotaoFlutuante();
 }
+
+function atualizaBotaoFlutuante() {
+    const divFloat = document.getElementById('float-carrinho');
+    const badge = document.getElementById('float-badge');
+    
+    if (carrinhoItens.length > 0) {
+        badge.innerText = carrinhoItens.length;
+        divFloat.style.display = 'flex';
+    } else {
+        divFloat.style.display = 'none';
+    }
+}
+
+function abrirConfirmacao() {
+    const lista = document.getElementById('lista-itens-confirmacao');
+    lista.innerHTML = '';
+    let total = 0;
+
+    carrinhoItens.forEach((item, index) => {
+        total += item.subtotal;
+        lista.innerHTML += `
+            <li>
+                <div style="flex:1">
+                    <div><strong>${item.quantidade}x ${item.nome_exibicao}</strong></div>
+                    ${item.observacao ? `<div style="font-size:11px;color:var(--muted)">Obs: ${item.observacao}</div>` : ''}
+                </div>
+                <div>R$ ${item.subtotal.toFixed(2)}</div>
+            </li>
+        `;
+    });
+
+    document.getElementById('modal-total-valor').innerText = `R$ ${total.toFixed(2)}`;
+    document.getElementById('modal-confirmacao').classList.add('open');
+}
+
+function fecharModalConfirmacao() {
+    document.getElementById('modal-confirmacao').classList.remove('open');
+}
+
+async function enviarPedidoLote() {
+    try {
+        // Envia um por um via loop assíncrono para seu backend (compatível com a API original)
+        for (const item of carrinhoItens) {
+            await api(`/api/comanda/${window._modalComandaId}/item`, 'POST', {
+                produto_id: item.produto_id,
+                quantidade: item.quantidade,
+                observacao: item.observacao,
+                produto2_id: item.produto2_id,
+                borda_id: item.borda_id,
+                tamanho: item.tamanho
+            });
+        }
+        
+        carrinhoItens = []; // Limpa
+        fecharModalConfirmacao();
+        atualizaBotaoFlutuante();
+        
+        if (tabAtual === 'delivery') {
+            await loadDelivery();
+        } else {
+            await loadMesas();
+        }
+    } catch (e) {
+        alert("Erro ao enviar pedido: " + e.message);
+    }
+}
+
 
 // ── Modal fechar ──────────────────────────────────────────────────────────────
 function openFechar(id, mesa, total) {
   comandaFecharId = id;
+  window._totalFecharAtual = total; 
+  document.getElementById('calc-pessoas').value = 1; 
   document.getElementById('fechar-resumo').innerHTML = `
     <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:1rem;text-align:center">
       <div style="font-size:13px;color:var(--muted);margin-bottom:4px">Mesa ${mesa} • Comanda #${id}</div>
       <div style="font-size:32px;font-weight:600;color:var(--accent)">R$ ${total.toFixed(2)}</div>
     </div>`;
   document.getElementById('fechar-overlay').classList.add('open');
+  calcularDivisaoConta(); 
 }
 
 function closeFechar() {
@@ -653,13 +843,13 @@ async function abrirMesaCaixa(numero) {
   const resultado = await api(`/api/mesa/${numero}/abrir`, 'POST', { garcom_id: garcomLogado ? garcomLogado.id : null });
   await loadCaixa();
   verComandaCaixa(resultado.comanda_id);
-  
 }
-
 async function verComandaCaixa(id) {
   const r = await api('/api/comandas/abertas');
   const c = r.find(x => x.id === id);
   if (!c) return;
+  window._totalFecharAtual = c.total;
+  document.getElementById('calc-pessoas').value = 1;
   const itens = c.itens.map(i => {
     let n = i.produto2_nome ? i.produto_nome+' / '+i.produto2_nome : i.produto_nome;
     if (i.borda) n += ' [borda: '+i.borda+']';
@@ -675,7 +865,112 @@ async function verComandaCaixa(id) {
     <button class="btn btn-primary btn-full" style="margin-top:.75rem" onclick="closeFechar();openModal(${c.id})">+ Adicionar item</button>`;
   comandaFecharId = id;
   document.getElementById('fechar-overlay').classList.add('open');
+  calcularDivisaoConta();
 }
+
+function calcularDivisaoConta() {
+  const pessoasInput = document.getElementById('calc-pessoas');
+  const pessoas = parseInt(pessoasInput.value) || 1;
+  
+  if (pessoas < 1) {
+    pessoasInput.value = 1;
+    return;
+  }
+  
+  const total = window._totalFecharAtual || 0;
+  const valorPorPessoa = total / pessoas;
+  
+  document.getElementById('calc-resultado-divisao').textContent = `R$ ${valorPorPessoa.toFixed(2)}`;
+}
+
+
+
+// ── BALCÃO ──────────────────────────────────────────────────────────────────
+async function loadBalcao() {
+  try {
+    let entregas = await api('/api/entregas');
+    const pedidosBalcao = entregas.filter(e => e.endereco === 'Retirada no Balcão');
+    
+    if (!pedidosBalcao.length) {
+      document.getElementById('balcao-list').innerHTML = 
+        '<div class="empty"><div class="empty-icon">🛍️</div>Nenhum pedido aguardando no balcão.</div>';
+      return;
+    }
+
+    document.getElementById('balcao-list').innerHTML = pedidosBalcao.map(e => {
+      return `
+        <div class="pedido-card">
+          <div class="pedido-header">
+            <span class="pedido-mesa" style="color:var(--accent)">Balcão #${e.id} (Comanda #${e.comanda_id})</span>
+            <span class="pedido-hora">  ${e.telefone || 'Sem telefone'}</span>
+          </div>
+          <div class="pedido-nome" style="margin-bottom: 8px; font-size: 16px;">👤 <strong>${e.nome_cliente}</strong></div>
+          <div style="font-weight: 600; margin-bottom: 10px; color: var(--green)">Total: R$ ${e.total.toFixed(2)}</div>
+          
+          <div class="pedido-actions">
+            <button class="btn btn-sm" onclick="verComandaCaixa(${e.comanda_id})"> Ver/Add Itens</button>
+            <button class="btn btn-sm btn-green" onclick="finalizarEntrega(${e.comanda_id})">Cliente Retirou (Fechar Conta)</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    document.getElementById('balcao-list').innerHTML = `<div class="empty" style="color:var(--red)">Erro: ${e.message}</div>`;
+  }
+}
+
+function abrirModalNovoBalcao() {
+  document.getElementById('b-nome').value = '';
+  document.getElementById('b-telefone').value = '';
+  document.getElementById('b-forma-pagamento').value = 'pix';
+  document.getElementById('b-troco').value = '0';
+  document.getElementById('b-troco-container').style.display = 'none';
+  document.getElementById('balcao-modal-overlay').classList.add('open');
+}
+
+function toggleTrocoFieldBalcao() {
+  const forma = document.getElementById('b-forma-pagamento').value;
+  const container = document.getElementById('b-troco-container');
+  if (forma === 'dinheiro') {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    document.getElementById('b-troco').value = '0';
+  }
+}
+
+function closeModalBalcao() {
+  document.getElementById('balcao-modal-overlay').classList.remove('open');
+}
+
+async function confirmarNovoBalcao() {
+  const nome = document.getElementById('b-nome').value.trim();
+  const telefone = document.getElementById('b-telefone').value.trim() || 'N/A';
+  const formaPagamento = document.getElementById('b-forma-pagamento').value;
+  const troco = parseFloat(document.getElementById('b-troco').value) || 0;
+
+  if (!nome) {
+    alert("Por favor, digite o nome de quem vai retirar o pedido!");
+    return;
+  }
+
+  try {
+    const resultado = await api('/api/entregas', 'POST', {
+      telefone: telefone,
+      nome_cliente: nome,
+      endereco: 'Retirada no Balcão', 
+      forma_pagamento: formaPagamento,
+      troco: troco
+    });
+    
+    closeModalBalcao();
+    await loadBalcao(); 
+    openModal(resultado.comanda_id); 
+  } catch (e) {
+    alert("Erro ao criar pedido no balcão: " + e.message);
+  }
+}
+
 // ── Delivery ──────────────────────────────────────────────────────────────────
 async function loadDelivery() {
   try {
@@ -692,6 +987,11 @@ async function loadDelivery() {
       const btnStatusHtml = e.status === 'pendente' 
         ? `<button class="btn btn-sm btn-primary" onclick="alterarStatusEntrega(${e.id}, 'em rota')">Despachar (Em Rota)</button>`
         : `<button class="btn btn-sm btn-green" onclick="finalizarEntrega(${e.comanda_id})">Entregue (Fechar Conta)</button>`;
+
+      const infoPagamentoHtml = `<div><strong>Pagamento:</strong> ${e.forma_pagamento.toUpperCase()}</div>`;
+      const infoTrocoHtml = (e.forma_pagamento === 'dinheiro' && e.troco > 0) 
+        ? `<div><strong>Troco para:</strong> R$ ${e.troco.toFixed(2)}</div>` 
+        : '';
 
       return `
         <div class="pedido-card">
@@ -719,7 +1019,21 @@ async function abrirModalNovaEntrega() {
   document.getElementById('d-telefone').value = '';
   document.getElementById('d-nome').value = '';
   document.getElementById('d-endereco').value = '';
+  document.getElementById('d-forma-pagamento').value = 'pix';
+  document.getElementById('d-troco').value = '0';
+  document.getElementById('d-troco-container').style.display = 'none';
   document.getElementById('delivery-modal-overlay').classList.add('open');
+
+}
+function toggleTrocoField () {
+  const forma = document.getElementById('d-forma-pagamento').value;
+  const container = document.getElementById('d-troco-container');
+  if (forma === 'dinheiro') {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    document.getElementById('d-troco').value = '0';
+  }
 }
 function closeModalDelivery() {
   document.getElementById('delivery-modal-overlay').classList.remove('open');
@@ -728,6 +1042,8 @@ async function confirmarNovaEntrega() {
   const telefone = document.getElementById('d-telefone').value.trim();
   const nome = document.getElementById('d-nome').value.trim();
   const endereco = document.getElementById('d-endereco').value.trim();
+  const formaPagamento = document.getElementById('d-forma-pagamento').value;
+  const troco = parseFloat(document.getElementById('d-troco').value) || 0;
 
   if (!telefone || !nome || !endereco) {
     alert("Por favor, preencha todos os campos do endereço e cliente!");
@@ -738,7 +1054,10 @@ async function confirmarNovaEntrega() {
     const resultado = await api('/api/entregas', 'POST', {
       telefone: telefone,
       nome_cliente: nome,
-      endereco: endereco
+      endereco: endereco,
+      forma_pagamento: formaPagamento,
+      troco: troco
+
     });
     
     closeModalDelivery();
@@ -771,38 +1090,6 @@ async function finalizarEntrega(comandaId) {
 }
 
 
-// ── Cozinha ───────────────────────────────────────────────────────────────────
-async function loadCozinha() {
-  const itens = await api('/api/cozinha');
-  if (!itens.length) {
-    document.getElementById('cozinha-list').innerHTML = '<div class="empty"><div class="empty-icon">✅</div>Tudo em dia! Nenhum pedido pendente.</div>';
-    return;
-  }
-  document.getElementById('cozinha-list').innerHTML = itens.map(i => {
-    let nome = i.produto2 ? i.produto+' / '+i.produto2 : i.produto;
-    const prox = {pendente:'preparando', preparando:'pronto', pronto:'entregue'};
-    const btnLabel = {pendente:'Iniciar preparo', preparando:'Marcar pronto', pronto:'Marcar entregue'};
-    const btnClass = {pendente:'', preparando:'btn-primary', pronto:'btn-green'};
-    return `<div class="pedido-card">
-      <div class="pedido-header">
-        <span class="pedido-mesa">Mesa ${i.mesa}</span>
-        <span class="pedido-hora">desde ${i.criado_em}</span>
-      </div>
-      <div class="pedido-nome">${i.quantidade}x ${nome}</div>
-      <div class="pedido-detalhe">${i.borda?'Borda: '+i.borda+'  ':''}${i.observacao?'💬 '+i.observacao:''}</div>
-      <div class="pedido-actions">
-        <span class="badge ${i.status}">${i.status}</span>
-        ${prox[i.status]?`<button class="btn btn-sm ${btnClass[i.status]}" onclick="avancarItem(${i.id},'${prox[i.status]}')">${btnLabel[i.status]}</button>`:''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function avancarItem(id, status) {
-  await api(`/api/item/${id}/status?status=${status}`, 'PATCH');
-  await loadCozinha();
-}
-
 // ── Cardápio ──────────────────────────────────────────────────────────────────
 async function loadCardapio() {
   if (!cardapio.length) cardapio = await api('/api/cardapio');
@@ -829,6 +1116,56 @@ async function loadCardapio() {
 
   document.getElementById('cardapio-list').innerHTML = html;
 }
+
+async function loadCardapio() {
+  if (!cardapio.length) cardapio = await api('/api/cardapio');
+  if (!bordas.length) bordas = await api('/api/bordas');
+  const cats = {};
+  cardapio.forEach(p => (cats[p.categoria] = cats[p.categoria]||[]).push(p));
+
+  let html = Object.entries(cats).map(([cat, itens]) => `
+    <div class="cat-label">${cat}</div>
+    <div class="card" style="padding:.5rem 1rem">
+      ${itens.map(p=>`<div class="prod-row">
+        <div><div class="prod-nome">${p.nome}</div>${p.descricao?`<div class="prod-desc">${p.descricao}</div>`:''}</div>
+        <div class="prod-preco">R$ ${p.preco.toFixed(2)}</div>
+      </div>`).join('')}
+    </div>`).join('');
+
+  html += `<div class="cat-label">Bordas</div>
+    <div class="card" style="padding:.5rem 1rem">
+      ${bordas.map(b=>`<div class="prod-row">
+        <div class="prod-nome">${b.tipo}</div>
+        <div class="prod-preco">${b.preco>0?'R$ '+b.preco.toFixed(2):'grátis'}</div>
+      </div>`).join('')}
+    </div>`;
+
+  document.getElementById('cardapio-list').innerHTML = html;
+}
+
+// ── Sincronização e Atualização Automática Sem Troca de Abas ───────────────────
+setInterval(async () => {
+  if (!garcomLogado) return;
+
+  try {
+    if (tabAtual === 'garcom') {
+      await loadMesas();
+    } else if (tabAtual === 'caixa') {
+      const modalAberto = document.getElementById('fechar-overlay').classList.contains('open');
+      if (!modalAberto) {
+        await loadCaixa();
+      }
+    } else if (tabAtual === 'delivery') {
+      await loadDelivery();
+
+    } else if (tabAtual === 'balcao') {
+      await loadBalcao();
+    }
+      
+  } catch (error) {
+    console.error("Erro na atualização em segundo plano:", error);
+  }
+}, 5000); 
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 // bloqueia o sistema até fazer login
