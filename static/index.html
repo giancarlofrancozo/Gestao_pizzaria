@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pizzaria</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -32,10 +32,9 @@ header { background: var(--bg2); border-bottom: 1px solid var(--border); padding
 .header-role { font-size: 12px; color: var(--muted); background: var(--bg3); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
 
 /* ── Nav ── */
-
 nav { display: flex; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
 nav::-webkit-scrollbar { display: none; }
-.nav-tab { flex: 1; min-width: 80px; padding: 12px 8px 10px; text-align: center; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap; }
+.nav-tab { flex: 1; min-width: 80px; padding: 12px 8px 10px; text-align: center; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap; flex-shrink: 0; }
 .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 .nav-tab span { display: block; font-size: 18px; margin-bottom: 2px; }
 
@@ -165,11 +164,11 @@ select:focus, input:focus { border-color: var(--accent); }
     <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--accent);text-align:center;margin-bottom:2rem">Pizzaria</div>
     <div class="card">
       <div class="form-group">
-        <label>Usuário</label>
+        <label for="login-usuario">Usuário</label>
         <input type="text" id="login-usuario" placeholder="Seu usuário">
       </div>
       <div class="form-group">
-        <label>Senha</label>
+        <label for="login-senha">Senha</label>
         <input type="password" id="login-senha" placeholder="Sua senha">
       </div>
       <div id="login-erro" style="color:var(--red);font-size:13px;margin-bottom:.5rem;display:none">Usuário ou senha incorretos</div>
@@ -186,7 +185,7 @@ select:focus, input:focus { border-color: var(--accent); }
 <nav>
   <div class="nav-tab active" onclick="setTab('garcom')"><span></span>Garçom</div>
   <div class="nav-tab" onclick="setTab('caixa')"><span></span>Caixa</div>
-  <div class="nav-tab" onclick="setTab('delivery')"><span></span>Delivery</div><div
+  <div class="nav-tab" onclick="setTab('delivery')"><span></span>Delivery</div>
   <div class="nav-tab" onclick="setTab('balcao')"><span></span>Balcão</div>
   <div class="nav-tab" onclick="setTab('cardapio')"><span></span>Cardápio</div>
   <div class="nav-tab" onclick="setTab('garcons')"><span></span>Garçons</div>
@@ -231,11 +230,11 @@ select:focus, input:focus { border-color: var(--accent); }
   <div class="card">
     <div class="card-title">Cadastrar garçom</div>
     <div class="form-group">
-      <label>Usuário</label>
+      <label for="g-usuario">Usuário</label>
       <input type="text" id="g-usuario" placeholder="Nome de usuário">
     </div>
     <div class="form-group">
-      <label>Senha</label>
+      <label for="g-senha">Senha</label>
       <input type="password" id="g-senha" placeholder="Senha">
     </div>
     <button class="btn btn-primary btn-full" onclick="cadastrarGarcom()">Cadastrar</button>
@@ -250,29 +249,29 @@ select:focus, input:focus { border-color: var(--accent); }
     <div class="modal-title">🛵 Nova Entrega</div>
     
     <div class="form-group">
-      <label>Telefone do Cliente</label>
+      <label for="d-telefone">Telefone do Cliente</label>
       <input type="text" id="d-telefone" placeholder="Ex: (11) 99999-9999">
     </div>
 
-<div class="form-group">
-  <label>Forma de Pagamento</label>
-  <select id="d-forma-pagamento" onchange="toggleTrocoField()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px;">
-    <option value="pix">Pix</option>
-    <option value="cartao">Cartão (Crédito/Débito)</option>
-    <option value="dinheiro">Dinheiro</option>
-  </select>
-</div>
-<div class="form-group" id="d-troco-container" style="display: none;">
-  <label>Troco para quanto?</label>
-  <input type="number" id="d-troco" value="0" step="0.01" placeholder="Ex: 50.00">
-</div>
     <div class="form-group">
-      <label>Nome do Cliente</label>
+      <label for="d-forma-pagamento">Forma de Pagamento</label>
+      <select id="d-forma-pagamento" onchange="toggleTrocoField()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px;">
+        <option value="pix">Pix</option>
+        <option value="cartao">Cartão (Crédito/Débito)</option>
+        <option value="dinheiro">Dinheiro</option>
+      </select>
+    </div>
+    <div class="form-group" id="d-troco-container" style="display: none;">
+      <label for="d-troco">Troco para quanto?</label>
+      <input type="number" id="d-troco" value="0" step="0.01" placeholder="Ex: 50.00">
+    </div>
+    <div class="form-group">
+      <label for="d-nome">Nome do Cliente</label>
       <input type="text" id="d-nome" placeholder="Nome completo">
     </div>
     
     <div class="form-group">
-      <label>Endereço de Entrega</label>
+      <label for="d-endereco">Endereço de Entrega</label>
       <input type="text" id="d-endereco" placeholder="Rua, número, bairro e apto">
     </div>
     
@@ -287,17 +286,17 @@ select:focus, input:focus { border-color: var(--accent); }
     <div class="modal-title"> Novo Pedido Balcão</div>
     
     <div class="form-group">
-      <label>Nome do Cliente (Quem vai retirar)</label>
+      <label for="b-nome">Nome do Cliente (Quem vai retirar)</label>
       <input type="text" id="b-nome" placeholder="Ex: João da Silva">
     </div>
     
     <div class="form-group">
-      <label>Telefone (Opcional para avisar quando ficar pronto)</label>
+      <label for="b-telefone">Telefone (Opcional para avisar quando ficar pronto)</label>
       <input type="text" id="b-telefone" placeholder="Ex: (11) 99999-9999">
     </div>
 
     <div class="form-group">
-      <label>Forma de Pagamento</label>
+      <label for="b-forma-pagamento">Forma de Pagamento</label>
       <select id="b-forma-pagamento" onchange="toggleTrocoFieldBalcao()" style="width: 100%; padding: 10px; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px;">
         <option value="pix">Pix</option>
         <option value="cartao">Cartão (Crédito/Débito)</option>
@@ -306,7 +305,7 @@ select:focus, input:focus { border-color: var(--accent); }
     </div>
     
     <div class="form-group" id="b-troco-container" style="display: none;">
-      <label>Troco para quanto?</label>
+      <label for="b-troco">Troco para quanto?</label>
       <input type="number" id="b-troco" value="0" step="0.01" placeholder="Ex: 50.00">
     </div>
     
@@ -320,37 +319,37 @@ select:focus, input:focus { border-color: var(--accent); }
     <div class="drag-bar"></div>
     <div class="modal-title">Adicionar item</div>
     <div class="form-group">
-      <label>Produto</label>
+      <label for="m-produto">Produto</label>
       <select id="m-produto" onchange="onProdChange()"></select>
     </div>
     <div class="form-group" id="m-row-tamanho" style="display:none">
-      <label>Tamanho</label>
-    <select id="m-tamanho">
-      <option value="grande">Grande</option>
-     <option value="broto">Broto (-R$ 10,00)</option>
-    </select>
-   </div>
+      <label for="m-tamanho">Tamanho</label>
+      <select id="m-tamanho">
+        <option value="grande">Grande</option>
+        <option value="broto">Broto (-R$ 10,00)</option>
+      </select>
+    </div>
     <div class="form-group" id="m-row-meio" style="display:none">
-      <label>Meio a meio?</label>
+      <label for="m-meio">Meio a meio?</label>
       <select id="m-meio" onchange="onMeioChange()">
         <option value="0">Não</option>
         <option value="1">Sim</option>
       </select>
     </div>
     <div class="form-group" id="m-row-prod2" style="display:none">
-      <label>Segundo sabor</label>
+      <label for="m-produto2">Segundo sabor</label>
       <select id="m-produto2"></select>
     </div>
     <div class="form-group" id="m-row-borda" style="display:none">
-      <label>Borda</label>
+      <label for="m-borda">Borda</label>
       <select id="m-borda"></select>
     </div>
     <div class="form-group">
-      <label>Quantidade</label>
+      <label for="m-qtd">Quantidade</label>
       <input type="number" id="m-qtd" value="1" min="1" max="20">
     </div>
     <div class="form-group">
-      <label>Observação</label>
+      <label for="m-obs">Observação</label>
       <input type="text" id="m-obs" placeholder="Ex: sem cebola">
     </div>
     
@@ -381,7 +380,6 @@ select:focus, input:focus { border-color: var(--accent); }
   🛒 <span id="float-badge">0</span> Lançar Pedido
 </div>
 
-
 <div class="overlay" id="fechar-overlay" onclick="if(event.target===this)closeFechar()">
   <div class="modal" id="fechar-content">
     <div class="drag-bar"></div>
@@ -391,7 +389,7 @@ select:focus, input:focus { border-color: var(--accent); }
       <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Dividir Conta</div>
       <div style="display: flex; gap: 12px; align-items: center;">
         <div style="flex: 1;">
-          <label style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">Nº de Pessoas</label>
+          <label for="calc-pessoas" style="font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px;">Nº de Pessoas</label>
           <input type="number" id="calc-pessoas" value="1" min="1" oninput="calcularDivisaoConta()" style="padding: 8px 10px; font-size: 14px;">
         </div>
         <div style="flex: 1; text-align: right;">
@@ -453,7 +451,6 @@ function setTab(t) {
 }
 
 // ── Garçom ────────────────────────────────────────────────────────────────────
-
 async function fazerLogin() {
   const usuario = document.getElementById('login-usuario').value.trim();
   const senha = document.getElementById('login-senha').value.trim();
@@ -556,20 +553,20 @@ async function loadMesaPanel(numero) {
         </div>
       </div>`).join('');
 
-panel.innerHTML = `
-  <div class="card">
-    <div style="margin-bottom:1rem">
-      <div style="font-size:15px;font-weight:600">Mesa ${numero} — Comanda #${comanda.id}</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px">desde ${comanda.abertura} • 👤 ${comanda.garcom}</div>
-    </div>
-    ${itensHtml}
-    <div class="total-bar">
-      <span class="total-label">Total</span>
-      <span class="total-value">R$ ${comanda.total.toFixed(2)}</span>
-    </div>
-    <button class="btn btn-primary btn-full" style="margin-top:.75rem" onclick="openModal(${comanda.id})">+ Adicionar item</button>
-    <button class="btn btn-danger btn-full" onclick="openFechar(${comanda.id}, ${numero}, ${comanda.total})">Fechar conta — R$ ${comanda.total.toFixed(2)}</button>
-  </div>`;
+  panel.innerHTML = `
+    <div class="card">
+      <div style="margin-bottom:1rem">
+        <div style="font-size:15px;font-weight:600">Mesa ${numero} — Comanda #${comanda.id}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">desde ${comanda.abertura} • 👤 ${comanda.garcom}</div>
+      </div>
+      ${itensHtml}
+      <div class="total-bar">
+        <span class="total-label">Total</span>
+        <span class="total-value">R$ ${comanda.total.toFixed(2)}</span>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:.75rem" onclick="openModal(${comanda.id})">+ Adicionar item</button>
+      <button class="btn btn-danger btn-full" onclick="openFechar(${comanda.id}, ${numero}, ${comanda.total})">Fechar conta — R$ ${comanda.total.toFixed(2)}</button>
+    </div>`;
 }
 
 async function abrirComanda(numero) {
@@ -660,14 +657,14 @@ function adicionarNoCarrinho() {
     nomeExibicao = `1/2 ${nomeBase} / 1/2 ${p2Select.options[p2Select.selectedIndex].text.split(' — ')[0]}`;
   }
 
-  const bordaEl = document.getElementById('m-borda');
+  const borderEl = document.getElementById('m-borda');
   let bordaId = null;
   let precoBorda = 0;
   
   if (document.getElementById('m-row-borda').style.display !== 'none') {
-      bordaId = parseInt(bordaEl.value);
-      precoBorda = parseFloat(bordaEl.options[bordaEl.selectedIndex].dataset.preco);
-      nomeExibicao += ` [${bordaEl.options[bordaEl.selectedIndex].text.split(' +')[0]}]`;
+      bordaId = parseInt(borderEl.value);
+      precoBorda = parseFloat(borderEl.options[borderEl.selectedIndex].dataset.preco);
+      nomeExibicao += ` [${borderEl.options[borderEl.selectedIndex].text.split(' +')[0]}]`;
   }
 
   const tamanho = document.getElementById('m-row-tamanho').style.display !== 'none'
@@ -679,7 +676,6 @@ function adicionarNoCarrinho() {
   const qtd = parseInt(document.getElementById('m-qtd').value) || 1;
   const obs = document.getElementById('m-obs').value;
 
-  // Adiciona ao array local
   carrinhoItens.push({
       produto_id: prodId,
       produto2_id: prod2Id,
@@ -692,7 +688,6 @@ function adicionarNoCarrinho() {
       subtotal: precoCalc * qtd
   });
 
-  // Limpa campos para novo lançamento
   document.getElementById('m-qtd').value = 1;
   document.getElementById('m-obs').value = '';
   document.getElementById('m-meio').value = '0';
@@ -742,19 +737,20 @@ function fecharModalConfirmacao() {
 
 async function enviarPedidoLote() {
     try {
-        // Envia um por um via loop assíncrono para seu backend (compatível com a API original)
-        for (const item of carrinhoItens) {
-            await api(`/api/comanda/${window._modalComandaId}/item`, 'POST', {
+        const promises = carrinhoItens.map(item => 
+            api(`/api/comanda/${window._modalComandaId}/item`, 'POST', {
                 produto_id: item.produto_id,
                 quantidade: item.quantidade,
                 observacao: item.observacao,
                 produto2_id: item.produto2_id,
                 borda_id: item.borda_id,
                 tamanho: item.tamanho
-            });
-        }
+            })
+        );
         
-        carrinhoItens = []; // Limpa
+        await Promise.all(promises);
+        
+        carrinhoItens = []; 
         fecharModalConfirmacao();
         atualizaBotaoFlutuante();
         
@@ -767,7 +763,6 @@ async function enviarPedidoLote() {
         alert("Erro ao enviar pedido: " + e.message);
     }
 }
-
 
 // ── Modal fechar ──────────────────────────────────────────────────────────────
 function openFechar(id, mesa, total) {
@@ -844,6 +839,7 @@ async function abrirMesaCaixa(numero) {
   await loadCaixa();
   verComandaCaixa(resultado.comanda_id);
 }
+
 async function verComandaCaixa(id) {
   const r = await api('/api/comandas/abertas');
   const c = r.find(x => x.id === id);
@@ -882,8 +878,6 @@ function calcularDivisaoConta() {
   
   document.getElementById('calc-resultado-divisao').textContent = `R$ ${valorPorPessoa.toFixed(2)}`;
 }
-
-
 
 // ── BALCÃO ──────────────────────────────────────────────────────────────────
 async function loadBalcao() {
@@ -988,11 +982,6 @@ async function loadDelivery() {
         ? `<button class="btn btn-sm btn-primary" onclick="alterarStatusEntrega(${e.id}, 'em rota')">Despachar (Em Rota)</button>`
         : `<button class="btn btn-sm btn-green" onclick="finalizarEntrega(${e.comanda_id})">Entregue (Fechar Conta)</button>`;
 
-      const infoPagamentoHtml = `<div><strong>Pagamento:</strong> ${e.forma_pagamento.toUpperCase()}</div>`;
-      const infoTrocoHtml = (e.forma_pagamento === 'dinheiro' && e.troco > 0) 
-        ? `<div><strong>Troco para:</strong> R$ ${e.troco.toFixed(2)}</div>` 
-        : '';
-
       return `
         <div class="pedido-card">
           <div class="pedido-header">
@@ -1023,8 +1012,8 @@ async function abrirModalNovaEntrega() {
   document.getElementById('d-troco').value = '0';
   document.getElementById('d-troco-container').style.display = 'none';
   document.getElementById('delivery-modal-overlay').classList.add('open');
-
 }
+
 function toggleTrocoField () {
   const forma = document.getElementById('d-forma-pagamento').value;
   const container = document.getElementById('d-troco-container');
@@ -1035,9 +1024,11 @@ function toggleTrocoField () {
     document.getElementById('d-troco').value = '0';
   }
 }
+
 function closeModalDelivery() {
   document.getElementById('delivery-modal-overlay').classList.remove('open');
 }
+
 async function confirmarNovaEntrega() {
   const telefone = document.getElementById('d-telefone').value.trim();
   const nome = document.getElementById('d-nome').value.trim();
@@ -1057,18 +1048,16 @@ async function confirmarNovaEntrega() {
       endereco: endereco,
       forma_pagamento: formaPagamento,
       troco: troco
-
     });
     
     closeModalDelivery();
-    
     await loadDelivery();
-    
     openModal(resultado.comanda_id);
   } catch (e) {
     alert("Erro ao criar entrega: " + e.message);
   }
 }
+
 async function alterarStatusEntrega(id, novoStatus) {
   try {
     await api(`/api/entregas/${id}/status?status=${novoStatus}`, 'PATCH');
@@ -1089,34 +1078,7 @@ async function finalizarEntrega(comandaId) {
   }
 }
 
-
 // ── Cardápio ──────────────────────────────────────────────────────────────────
-async function loadCardapio() {
-  if (!cardapio.length) cardapio = await api('/api/cardapio');
-  if (!bordas.length) bordas = await api('/api/bordas');
-  const cats = {};
-  cardapio.forEach(p => (cats[p.categoria] = cats[p.categoria]||[]).push(p));
-
-  let html = Object.entries(cats).map(([cat, itens]) => `
-    <div class="cat-label">${cat}</div>
-    <div class="card" style="padding:.5rem 1rem">
-      ${itens.map(p=>`<div class="prod-row">
-        <div><div class="prod-nome">${p.nome}</div>${p.descricao?`<div class="prod-desc">${p.descricao}</div>`:''}</div>
-        <div class="prod-preco">R$ ${p.preco.toFixed(2)}</div>
-      </div>`).join('')}
-    </div>`).join('');
-
-  html += `<div class="cat-label">Bordas</div>
-    <div class="card" style="padding:.5rem 1rem">
-      ${bordas.map(b=>`<div class="prod-row">
-        <div class="prod-nome">${b.tipo}</div>
-        <div class="prod-preco">${b.preco>0?'R$ '+b.preco.toFixed(2):'grátis'}</div>
-      </div>`).join('')}
-    </div>`;
-
-  document.getElementById('cardapio-list').innerHTML = html;
-}
-
 async function loadCardapio() {
   if (!cardapio.length) cardapio = await api('/api/cardapio');
   if (!bordas.length) bordas = await api('/api/bordas');
@@ -1157,7 +1119,6 @@ setInterval(async () => {
       }
     } else if (tabAtual === 'delivery') {
       await loadDelivery();
-
     } else if (tabAtual === 'balcao') {
       await loadBalcao();
     }
@@ -1168,9 +1129,7 @@ setInterval(async () => {
 }, 5000); 
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-// bloqueia o sistema até fazer login
 document.getElementById('tela-login').style.display = 'flex';
-
 </script>
 </body>
 </html>
