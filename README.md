@@ -18,7 +18,7 @@ O sistema foi construído para substituir o controle manual de pedidos em papel,
 
 ## Funcionalidades
 
-### 👨‍🍳 Módulo do Garçom
+###  Módulo do Garçom
 - Mapa visual de mesas com status em tempo real (livre/ocupada)
 - Abertura de comanda por mesa
 - Adição de itens com suporte a:
@@ -29,7 +29,7 @@ O sistema foi construído para substituir o controle manual de pedidos em papel,
 - Fechamento de conta com **divisão por pessoas**
 - Carrinho temporário com envio em lote
 
-### 💰 Módulo do Caixa (acesso restrito ao administrador)
+###  Módulo do Caixa (acesso restrito ao administrador)
 - Painel com todas as comandas abertas e faturamento total
 - Abertura de mesas diretamente do caixa
 - **Seleção de itens para pagamento** com checkboxes
@@ -40,19 +40,19 @@ O sistema foi construído para substituir o controle manual de pedidos em papel,
 - **Divisão da conta** baseada nos itens selecionados
 - **Fechamento automático** quando todos itens estão pagos
 
-### 📋 Histórico de Comandas Fechadas
+###  Histórico de Comandas Fechadas
 - Lista completa das últimas 50 comandas fechadas
 - **Filtro por período** (data início / data fim)
 - Estatísticas do período: faturamento, quantidade de comandas e itens
 - **Reabertura de comandas** fechadas no dia atual
 - Ao reabrir, a mesa é reocupada e os itens anteriores restaurados
 
-### 👨‍🍳 Tela da Cozinha
+###  Tela da Cozinha
 - Lista de pedidos pendentes e em preparo
 - Atualização de status: pendente → preparando → pronto → entregue
 - Exibição do garçom responsável
 
-### 📄 Cardápio
+###  Cardápio
 - Listagem de produtos por categoria (pizza, bebida, sobremesa)
 - **Busca** por nome, descrição ou categoria
 - **Abas de categorias** com contagem de itens
@@ -61,29 +61,29 @@ O sistema foi construído para substituir o controle manual de pedidos em papel,
 - **Edição** de nome, categoria, preço e descrição
 - **Remoção** (soft delete) de itens
 
-### 🧀 Gerenciamento de Bordas
+###  Gerenciamento de Bordas
 - Adicionar novas bordas com tipo e preço
 - Remover bordas existentes
 - Listagem integrada na visualização do cardápio
 
-### 🛵 Delivery & Balcão
+###  Delivery & Balcão
 - Cadastro de entregas com endereço, telefone e forma de pagamento
 - Pedidos de retirada no balcão
 - Acompanhamento de status: pendente → em rota → entregue
 - Integração com comandas para adição de itens
 
-### 🖨️ Impressoras
+###  Impressoras
 - Cadastro de impressoras de rede (IP/porta) e USB
 - Associação de categorias de produto a impressoras específicas
 - Teste de conexão
 - Impressão automática de pedidos na cozinha
 
-### 👤 Gestão de Usuários
+###  Gestão de Usuários
 - Cadastro e remoção de garçons
 - Login com usuário e senha
 - Controle de acesso por nível (admin/garçom)
 
-### 🔄 Sincronização Automática
+###  Sincronização Automática
 - Atualização em tempo real a cada 5 segundos
 - Dados não recarregam enquanto modal está aberto
 - Suporte a múltiplos dispositivos simultaneamente
