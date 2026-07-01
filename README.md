@@ -1,65 +1,103 @@
-[# Sistema de Gerenciamento para Pizzaria
+# 🍕 Sistema de Gerenciamento para Pizzaria
 
 Sistema completo de gerenciamento de comandas para restaurantes e pizzarias, desenvolvido em Python com interface web responsiva acessível por celular via Wi-Fi.
 
 ---
 
-## Demonstracao em Video
+## Demonstração em Vídeo
 
-Assista ao sistema funcionando ao vivo:
-
-[![Demonstracao do sistema](https://img.youtube.com/vi/4vzhSETQE1I/0.jpg)](https://youtu.be/UFahEj4N4pg)
+[![Demonstração do sistema](https://img.youtube.com/vi/4vzhSETQE1I/0.jpg)](https://youtu.be/UFahEj4N4pg)
 
 ---
 
----
+## Visão Geral
 
-## Visao Geral
-
-O sistema foi construído para substituir o controle manual de pedidos em papel, permitindo que garçons registrem pedidos pelo celular enquanto o caixa acompanha tudo em tempo real no computador. A cozinha visualiza os pedidos em andamento e atualiza o status de cada item conforme são preparados.
+O sistema foi construído para substituir o controle manual de pedidos em papel, permitindo que garçons registrem pedidos pelo celular enquanto o caixa acompanha tudo em tempo real. A cozinha visualiza os pedidos em andamento e atualiza o status de cada item conforme são preparados.
 
 ---
 
 ## Funcionalidades
 
-**Modulo do Garcom**
+### 👨‍🍳 Módulo do Garçom
 - Mapa visual de mesas com status em tempo real (livre/ocupada)
 - Abertura de comanda por mesa
-- Adicao de itens com suporte a meio a meio, borda recheada e tamanho (broto/grande)
-- Remocao de itens pendentes
-- Fechamento de conta
+- Adição de itens com suporte a:
+  - **Meio a meio** (dois sabores de pizza)
+  - **Borda recheada** com preço dinâmico
+  - **Tamanho** (grande / broto com desconto automático)
+- Remoção de itens pendentes
+- Fechamento de conta com **divisão por pessoas**
+- Carrinho temporário com envio em lote
 
-**Modulo do Caixa (acesso restrito ao administrador)**
-- Painel geral com todas as mesas e comandas abertas
-- Faturamento total em aberto
-- Abertura de mesas e lancamento de pedidos
-- Fechamento de comandas
+### 💰 Módulo do Caixa (acesso restrito ao administrador)
+- Painel com todas as comandas abertas e faturamento total
+- Abertura de mesas diretamente do caixa
+- **Seleção de itens para pagamento** com checkboxes
+- **Pagamento parcial** — marca itens específicos como pagos
+- Indicador visual de itens **pagos vs. restantes**
+- Campo **"Valor recebido"** com cálculo automático de **troco**
+- **Confirmação** quando valor recebido é menor que o total
+- **Divisão da conta** baseada nos itens selecionados
+- **Fechamento automático** quando todos itens estão pagos
 
-**Tela da Cozinha**
+### 📋 Histórico de Comandas Fechadas
+- Lista completa das últimas 50 comandas fechadas
+- **Filtro por período** (data início / data fim)
+- Estatísticas do período: faturamento, quantidade de comandas e itens
+- **Reabertura de comandas** fechadas no dia atual
+- Ao reabrir, a mesa é reocupada e os itens anteriores restaurados
+
+### 👨‍🍳 Tela da Cozinha
 - Lista de pedidos pendentes e em preparo
-- Atualizacao de status: pendente, preparando, pronto, entregue
-- Exibicao do nome do garcom responsavel por cada pedido
+- Atualização de status: pendente → preparando → pronto → entregue
+- Exibição do garçom responsável
 
-**Cardapio**
+### 📄 Cardápio
 - Listagem de produtos por categoria (pizza, bebida, sobremesa)
-- Bordas disponiveis com preco
+- **Busca** por nome, descrição ou categoria
+- **Abas de categorias** com contagem de itens
+- **Cadastro dinâmico** de novos itens diretamente pela interface
+- **Categorias dinâmicas** — crie novas categorias personalizadas
+- **Edição** de nome, categoria, preço e descrição
+- **Remoção** (soft delete) de itens
 
-**Gestao de Usuarios**
-- Cadastro e remocao de garcons
-- Login com usuario e senha
-- Controle de acesso por nivel (admin/garcom)
+### 🧀 Gerenciamento de Bordas
+- Adicionar novas bordas com tipo e preço
+- Remover bordas existentes
+- Listagem integrada na visualização do cardápio
+
+### 🛵 Delivery & Balcão
+- Cadastro de entregas com endereço, telefone e forma de pagamento
+- Pedidos de retirada no balcão
+- Acompanhamento de status: pendente → em rota → entregue
+- Integração com comandas para adição de itens
+
+### 🖨️ Impressoras
+- Cadastro de impressoras de rede (IP/porta) e USB
+- Associação de categorias de produto a impressoras específicas
+- Teste de conexão
+- Impressão automática de pedidos na cozinha
+
+### 👤 Gestão de Usuários
+- Cadastro e remoção de garçons
+- Login com usuário e senha
+- Controle de acesso por nível (admin/garçom)
+
+### 🔄 Sincronização Automática
+- Atualização em tempo real a cada 5 segundos
+- Dados não recarregam enquanto modal está aberto
+- Suporte a múltiplos dispositivos simultaneamente
 
 ---
 
 ## Tecnologias Utilizadas
 
-| Camada | Tecnologia |
-|---|---|
-| Backend | Python 3.13, FastAPI |
-| Banco de dados | SQLite, SQLAlchemy ORM |
-| Frontend | HTML, CSS, JavaScript puro |
-| Interface terminal | Rich |
-| Servidor | Uvicorn |
+| Camada         | Tecnologia                          |
+|----------------|-------------------------------------|
+| Backend        | Python 3.13, FastAPI                |
+| Banco de dados | SQLite, SQLAlchemy ORM              |
+| Frontend       | HTML5, CSS3, JavaScript puro        |
+| Servidor       | Uvicorn com hot-reload              |
 
 ---
 
@@ -67,43 +105,45 @@ O sistema foi construído para substituir o controle manual de pedidos em papel,
 
 ```
 pizzaria/
-├── server.py                   <- API REST com FastAPI
-├── main.py                     <- Entrada do sistema via terminal
-├── criar_admin.py              <- Script para criar usuario administrador
+├── server.py                   ← API REST com FastAPI
+├── main.py                     ← Entrada do sistema via terminal
+├── criar_admin.py              ← Script para criar admin
+├── impressora.py               ← Módulo de impressão térmica
 ├── requirements.txt
+├── pizzaria.db                 ← Banco SQLite (criado automaticamente)
 ├── models/
-│   └── database.py             <- Modelos do banco de dados (ORM)
+│   └── database.py             ← Modelos ORM e migrações
 ├── services/
-│   └── pizzaria_service.py     <- Logica de negocio
+│   └── pizzaria_service.py     ← Lógica de negócio
 ├── interfaces/
-│   ├── garcom.py               <- Interface terminal do garcom
-│   ├── caixa.py                <- Interface terminal do caixa
-│   └── cozinha.py              <- Interface terminal da cozinha
+│   ├── garcom.py               ← Interface terminal do garçom
+│   ├── caixa.py                ← Interface terminal do caixa
+│   └── cozinha.py              ← Interface terminal da cozinha
 └── static/
-    └── index.html              <- Frontend web responsivo
+    └── index.html              ← Frontend web responsivo (SPA)
 ```
 
 ---
 
-## Instalacao
+## Instalação
 
 **Requisitos**
 - Python 3.10 ou superior
 - pip
 
-**Instalar dependencias**
+**Instalar dependências**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Criar o banco de dados e o usuario administrador**
+**Criar o banco de dados e o usuário administrador**
 
 ```bash
 python criar_admin.py
 ```
 
-Isso cria o banco `pizzaria.db` com 10 mesas, o cardapio inicial e o usuario `admin` com senha `1234`.
+Isso cria o banco `pizzaria.db` com 10 mesas, o cardápio inicial e o usuário `admin` com senha `1234`.
 
 ---
 
@@ -131,10 +171,10 @@ python main.py
 
 1. Conecte o celular na mesma rede Wi-Fi do computador
 2. No Windows, abra o CMD e execute `ipconfig`
-3. Copie o valor de "Endereco IPv4" (ex: 192.168.1.100)
+3. Copie o valor de **"Endereço IPv4"** (ex: 192.168.1.100)
 4. No celular, abra o navegador e acesse `http://192.168.1.100:8000`
 
-Caso nao consiga acessar, adicione uma regra no firewall do Windows:
+Caso não consiga acessar, adicione uma regra no firewall do Windows:
 
 ```bash
 netsh advfirewall firewall add rule name="Pizzaria" dir=in action=allow protocol=TCP localport=8000
@@ -144,26 +184,69 @@ netsh advfirewall firewall add rule name="Pizzaria" dir=in action=allow protocol
 
 ## Modelos do Banco de Dados
 
-- **Mesa** — numero, capacidade, status
-- **Cardapio** — nome, categoria, descricao, preco, disponivel
-- **Borda** — tipo, preco
-- **Comanda** — mesa, garcom, abertura, fechamento, status
-- **ItemPedido** — comanda, produto, quantidade, tamanho, preco unitario, borda, meio a meio, observacao, status
-- **Garcom** — usuario, senha, ativo, admin
+| Tabela          | Campos principais                                         |
+|-----------------|-----------------------------------------------------------|
+| **Mesa**        | numero, capacidade, status (livre/ocupada)                |
+| **Cardapio**    | nome, categoria, descricao, preco, disponivel              |
+| **Borda**       | tipo, preco, disponivel                                   |
+| **Comanda**     | mesa, garcom, abertura, fechamento, status (aberta/fechada) |
+| **ItemPedido**  | comanda, produto, quantidade, tamanho, preco_unitario, borda, meio_a_meio, observacao, status, pago |
+| **Garcom**      | usuario, senha, ativo, admin                              |
+| **Entrega**     | comanda, telefone, nome_cliente, endereco, status, forma_pagamento, troco |
+| **ConfigImpressora** | nome, tipo, ip, porta, usb_vendor, usb_product, ativo |
+| **ConfigCategoria**  | impressora, categoria                               |
 
 ---
 
-## Proximos Passos
+## API REST
 
-- Impressao de cupom em impressora termica
-- Relatorio de faturamento por periodo
-- Cadastro de novos itens no cardapio pela interface web
-- Historico de comandas fechadas
+Principais endpoints:
+
+| Método | Rota                          | Descrição                          |
+|--------|-------------------------------|------------------------------------|
+| POST   | `/api/login`                  | Login de garçom/admin              |
+| GET    | `/api/mesas`                  | Listar mesas                       |
+| POST   | `/api/mesa/{num}/abrir`       | Abrir comanda                      |
+| GET    | `/api/mesa/{num}/comanda`     | Buscar comanda da mesa             |
+| GET    | `/api/cardapio`               | Listar cardápio                    |
+| POST   | `/api/cardapio`               | Adicionar item ao cardápio         |
+| PUT    | `/api/cardapio/{id}`          | Editar item do cardápio            |
+| DELETE | `/api/cardapio/{id}`          | Remover item do cardápio           |
+| GET    | `/api/bordas`                 | Listar bordas                      |
+| POST   | `/api/bordas`                 | Adicionar borda                    |
+| DELETE | `/api/bordas/{id}`            | Remover borda                      |
+| GET    | `/api/comandas/abertas`       | Listar comandas abertas            |
+| GET    | `/api/comandas/fechadas`      | Listar comandas fechadas (c/ filtro) |
+| POST   | `/api/comanda/{id}/fechar`    | Fechar comanda                     |
+| POST   | `/api/comanda/{id}/reabrir`   | Reabrir comanda (apenas do dia)    |
+| POST   | `/api/comanda/{id}/item`      | Adicionar item na comanda          |
+| POST   | `/api/comanda/{id}/itens/pagar` | Marcar itens como pagos         |
+| DELETE | `/api/item/{id}`              | Remover item pendente              |
+| PATCH  | `/api/item/{id}/status`       | Atualizar status do item           |
+| GET    | `/api/cozinha`                | Listar itens na cozinha            |
+| GET    | `/api/garcons`                | Listar garçons                     |
+| POST   | `/api/garcons`                | Cadastrar garçom                   |
+| DELETE | `/api/garcons/{id}`           | Remover garçom                     |
+| GET    | `/api/entregas`               | Listar entregas/delivery ativas    |
+| POST   | `/api/entregas`               | Criar entrega/delivery             |
+| PATCH  | `/api/entregas/{id}/status`   | Atualizar status da entrega        |
+| GET    | `/api/impressoras`            | Listar impressoras                 |
+| POST   | `/api/impressoras`            | Cadastrar impressora               |
+| DELETE | `/api/impressoras/{id}`       | Remover impressora                 |
+| POST   | `/api/impressoras/categoria`  | Vincular categoria à impressora    |
+
+---
+
+## Próximos Passos
+
+- Relatório de faturamento detalhado por período
+- Impressão de cupom não-fiscal ao fechar conta
+- Gráficos e dashboard no caixa
 - Deploy em nuvem para acesso externo
+- Notificações push para novos pedidos
 
 ---
 
 ## Autor
 
 Desenvolvido como projeto pessoal para estudo de desenvolvimento web e APIs REST com Python.
-](https://youtu.be/UFahEj4N4pg)
